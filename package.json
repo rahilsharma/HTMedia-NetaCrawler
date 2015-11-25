@@ -1,0 +1,14 @@
+{
+  "name"         : "HTMedia",
+  "version"      : "0.0.1",
+  "description"  : "Scrape le web and finz the winners.",
+  "main"         : "server.js",
+  "author"       : "Rahil Sharma",
+  "dependencies" : {
+    "express"    : "latest",
+    "request"    : "latest",
+    "cheerio"    : "latest",
+    "jquery":"latest",
+    "mongodb":"latest"
+  }
+}
