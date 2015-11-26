@@ -7,6 +7,8 @@ var request = require('request');
 var cheerio = require('cheerio');
 var app     = express();
 var rootUrl='http://myneta.info/';
+var stateUrl='';
+var state="Delhi";
 var options = {
     url:rootUrl,
     headers: {
@@ -15,23 +17,38 @@ var options = {
 };
 
 request(options, function callback(error, response, body) {
-        // console.log('cm here');
         $ = cheerio.load(body);
         var l=$('.item').children().closest('a');
-//console.log(l.length);
-  //    console.log(l[0].children[0].data);
-    //console.log(l[0].attribs.href)
     for(var ii=0;ii< l.length ; ii++){
-        if(l[ii].children[0].data == "Delhi"){
-
+        if(l[ii].children[0].data == state){
+          // console.log(l[ii].attribs.href);
+            stateUrl=l[ii].attribs.href;
+   //now that we have href lets hit
+hitstatePage(stateUrl);
         }
     }
-        //if (kk=chngvr.length-1){
-        //   //callback function
-        //    console.log(kk);
-        //  printglobalArray();
-        //}
+
 
     }
 
 );
+function hitstatePage(stateUrl){
+    options = {
+        url:stateUrl,
+        headers: {
+            'User-Agent': 'Mozilla'
+        }
+    };
+    request(options, function callback(error, response, body) {
+            $ = cheerio.load(body);
+            var l=$('.item').children().closest('h3');
+          //  console.log(l.length);
+        for (var xx=0;xx< l.length;xx++){
+            console.log(l[xx].next.next.attribs.href);
+        }
+
+
+        }
+
+    );
+}
