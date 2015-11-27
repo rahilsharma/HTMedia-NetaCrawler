@@ -15,8 +15,13 @@ var options = {
         'User-Agent': 'Mozilla'
     }
 };
-
+console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+console.log("Hitting " +  rootUrl);
+console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 request(options, function callback(error, response, body) {
+    console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    console.log("Got Delhi Url " );
+    console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         $ = cheerio.load(body);
         var l=$('.item').children().closest('a');
     for(var ii=0;ii< l.length ; ii++){
@@ -34,7 +39,13 @@ function hitstatePage(stateUrl){
             'User-Agent': 'Mozilla'
         }
     };
+    console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    console.log("Hitting " +  stateUrl);
+    console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     request(options, function callback(error, response, body) {
+        console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        console.log("Got Results ::: Finding Url Yearwise " );
+        console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             $ = cheerio.load(body);
             var l=$('.item').children().closest('h3');
         for (var xx=0;xx< l.length;xx++){
