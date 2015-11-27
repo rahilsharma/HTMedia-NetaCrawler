@@ -1,14 +1,14 @@
 /**
  * Created by rs on 25/11/15.
  */
-var express = require('express');
-var fs = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
-var app     = express();
 var rootUrl='http://myneta.info/';
 var stateUrl='';
 var state="Delhi";
+var stateYrs=[];
+var stateYrsLinks=[];
+var winnerListYearwise=[];
 var options = {
     url:rootUrl,
     headers: {
@@ -21,16 +21,11 @@ request(options, function callback(error, response, body) {
         var l=$('.item').children().closest('a');
     for(var ii=0;ii< l.length ; ii++){
         if(l[ii].children[0].data == state){
-          // console.log(l[ii].attribs.href);
             stateUrl=l[ii].attribs.href;
-   //now that we have href lets hit
-hitstatePage(stateUrl);
+         hitstatePage(stateUrl);
         }
     }
-
-
     }
-
 );
 function hitstatePage(stateUrl){
     options = {
@@ -42,13 +37,40 @@ function hitstatePage(stateUrl){
     request(options, function callback(error, response, body) {
             $ = cheerio.load(body);
             var l=$('.item').children().closest('h3');
-          //  console.log(l.length);
         for (var xx=0;xx< l.length;xx++){
-            console.log(l[xx].next.next.attribs.href);
+            stateYrs.push(l[xx].children[0].data);
+            stateYrsLinks.push(l[xx].next.next.attribs.href);
+        }
+        getWinnerList(stateYrsLinks);
+        }
+    );
+}
+function getWinnerList(stateYrsLinks){
+var len=stateYrsLinks.length;
+    for(var gg=0;gg<len;gg++){
+        savelisttoDB(stateYrsLinks[gg],gg);
+    }
+}
+function savelisttoDB(stateYrsLink,gg){
+
+    options = {
+        url:stateYrsLink,
+        headers: {
+            'User-Agent': 'Mozilla'
+        }
+    };
+    request(options, function callback(error, response, body) {
+        var tmpArray=[];
+            $ = cheerio.load(body);
+            var l=$('.tableFloatingHeaderOriginal').nextAll();
+        for(var kkk=0;kkk< l.length;kkk++){
+            tmpArray.push(l[kkk].children[2].next.children[0].children[0].children[0].data);
         }
 
+        winnerListYearwise.push(tmpArray);
+        console.log(stateYrsLink);
+        console.log(tmpArray);
 
         }
-
     );
 }
